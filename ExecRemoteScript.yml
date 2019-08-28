@@ -1,0 +1,8 @@
+- name: Executar scripts.
+  hosts: servidor
+  remote_user: root
+  tasks:
+  - name: Primeiro Script
+    command: bash /root/script.sh
+  - name: Segundo Script
+    command: bash /root/script2.sh
