@@ -1,0 +1,23 @@
+FROM ubuntu:12.04  
+MAINTAINER Time On Going <on-going@justdigital.com.br>
+
+RUN apt-get -y update  
+RUN apt-get install -y python-yaml python-jinja2 git ##Instala as dependências do Ansible
+
+RUN git clone https://github.com/ansible/ansible.git /tmp/ansible  
+WORKDIR /tmp/ansible  
+RUN git submodule update --init --recursive ##Os módulos core do Ansible são agora submódulos Git, então precisamos cloná-los também.
+
+ENV PATH $PATH:/tmp/ansible/bin ##Coloca a pasta com os executáveis do Ansible no PATH  
+ENV ANSIBLE_LIBRARY /tmp/ansible/library ##Define a variável com as bibliotecas do Ansible  
+ENV PYTHONPATH /tmp/ansible/lib:$PYTHON_PATH ##Defien a variável para as bibliotecas do Python
+
+ADD ./ansible /ansible ##Insere a pasta com as roles, os playbooks, etc  
+WORKDIR /ansible  
+RUN ansible-playbook web-playbook.yml -c local ##Roda o Ansible, indicando qual playbook e a conexão a ser usada, neste caso a local
+
+WORKDIR /var/www/havaianas
+
+EXPOSE 80
+
+CMD ["apache2ctl", "-D", "FOREGROUND"] 
