@@ -1,0 +1,19 @@
+- name: 1 - Criando servidores web e bd
+  hosts: servidor
+  tasks:
+    - name: garantiar que o Apache esteja na última versão
+      package: name=httpd state=latest
+    # task 2
+    - name: conter a linha '127.0.0.1 meuhost' no arquivo /etc/hosts
+      lineinfile: path=/etc/hosts line='127.0.0.1 meuhost' state=present
+
+- name: 2 - Criando o servidor de banco
+  hosts: servidor
+
+  tasks:
+    # task 1
+    - name: garantir que o mysqld (MariaDB) está na última versão
+      package: name=mariadb-server state=latest
+    # task 2
+    - name: garantir que o  mysqld (MariaDB) está executando (e habilitá-lo no boot)
+      service: name=mariadb state=started enabled=yes
