@@ -1,0 +1,5 @@
+[servidor]
+node2 ansible_ssh_host=10.1.1.5 ansible_ssh_user=root ansible_ssh_pass=root2019
+node3 ansible_ssh_host=10.1.1.5 ansible_ssh_user=root ansible_ssh_pass=root2019
+
+#ansible vault
