@@ -1,8 +1,13 @@
 - hosts: all
+  vars:
+    create_containers: 4
+    default_container_name: docker
+    default_container_image: debian
+    default_container_command: sleep 1d
   tasks:
-    - name: Dependencias
+    - name: Dependencias 
       apt: name={{ item }} state=latest update_cache=yes
-      loop: [ 'apt-transport-https', 'ca-certificates', 'curl', 'software-properties-common', 'python3-pip', 'virtualenv', 'python3-setuptools']
+      loop: [ 'apt-transport-https', 'ca-certificates', 'curl', 'software-properties-common', 'python3-pip', 'virtualenv', 'python3-setuptools','python-setuptools','python-pip']
 
     - name: Add Docker GPG apt Key
       apt_key:
@@ -15,4 +20,37 @@
         state: present
 
     - name: Update apt e install docker-ce
-      apt: update_cache=yes name=docker-ce state=latest                
+      apt: update_cache=yes name=docker-ce state=latest
+
+    - name: Install Docker Module for Python
+      pip:
+        name: docker
+
+    - name: pull default Container
+      docker_image:
+        name: "{{ default_container_image }}"
+    - name: pull portainer
+      docker_image:
+        name: portainer/portainer
+    - name: pull alpine
+      docker_image:
+        name: alpine
+    - name: pull openjdk:8
+      docker_image:
+        name: openjdk:8-stretch
+    - name: pull alpine
+      docker_image:
+        name: alpine
+    - name: pull openjdk:latest
+      docker_image:
+        name: openjdk
+
+    - name: Copia o daemon.json local para /etc/docker/
+      copy:
+        src: daemon.json
+        dest: /etc/docker/
+        owner: root
+        group: root
+    
+    - name: Reiniciar o serviço do Docker e habilitar no boot
+      service: name=docker state=restarted enabled=yes
