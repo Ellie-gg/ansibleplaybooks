@@ -1,0 +1,4 @@
+- hosts: all
+  tasks:
+  - name: copia arquivo para o host
+    copy: src=/etc/hosts dest=/root/
