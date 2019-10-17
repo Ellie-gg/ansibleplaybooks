@@ -1,0 +1,8 @@
+- name: Install a list of packages Debian
+  apt:
+    name: "{{ packages }}"
+  vars:
+    packages:
+    - vim
+    - tcpdump
+
