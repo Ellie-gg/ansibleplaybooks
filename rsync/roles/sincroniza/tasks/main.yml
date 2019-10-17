@@ -1,0 +1,6 @@
+- name: Synchronize and delete files in dest on the remote host that are not found in src of localhost.
+  synchronize:
+    src: /root/rsync/
+    dest: /tmp/testa/
+    delete: yes
+    recursive: yes
