@@ -1,0 +1,16 @@
+image: elielgarcia/ansible:2.10.0
+
+stages:
+  - run
+  
+variables:
+  GIT_SSL_NO_VERIFY: "true"
+
+run_playbook:
+  stage: run
+  script:
+    - chmod 0600 $TOMCAT_KEY
+    - ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i ansible/hosts -u tomcat-cresolcredi -e remote_md5_hash="$remote_md5_hash" --private-key='$TOMCAT_KEY' ansible/playbooks/deploy-cresolcredi.yml
+  tags:
+    - default 
+  when: manual
